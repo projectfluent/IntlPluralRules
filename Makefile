@@ -12,7 +12,7 @@ NPM_TAG = latest
 
 BIN = ./node_modules/.bin
 
-INTERMEDIATES = makePluralData pluralData.js
+INTERMEDIATES = pluralData.js
 RESULTS = polyfill.js polyfill.min.js
 
 .PHONY: all clean lint test test-browser release-check-init release-check-branch release-check-head release
@@ -22,16 +22,11 @@ all: polyfill.js .make_lint .make_test polyfill.min.js
 clean: ; rm -rf $(INTERMEDIATES) $(RESULTS) .make_*
 
 
-makePluralData: src/makePluralData.js
-	echo "#!/usr/bin/env node\n" > $@
-	$(BIN)/babel $< >> $@
-	chmod a+x $@
-
-pluralData.js: makePluralData
-	./$< > $@
+pluralData.js: src/makePluralData.js
+	node $< > $@
 
 polyfill.js: src/polyfill.js pluralData.js
-	$(BIN)/browserify $< -t babelify -s PluralRulesPolyfill -o $@
+	$(BIN)/rollup -c rollup_config.js $< > $@
 
 polyfill.min.js: polyfill.js
 	$(BIN)/uglifyjs $< --compress --mangle -o $@

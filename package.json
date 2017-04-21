@@ -20,9 +20,12 @@
     "url": "https://github.com/eemeli/IntlPluralRules/issues"
   },
   "files": [
+    "src",
+    "pluralData.js",
     "polyfill.*"
   ],
   "main": "polyfill",
+  "module": "src/polyfill.js",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
